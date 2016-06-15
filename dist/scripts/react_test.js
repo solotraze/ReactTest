@@ -9,17 +9,50 @@ var Comment = React.createClass({
 });
 var CommentList = React.createClass({
   render: function() {
+    var commentNodes = this.props.data.map(function(comment) {
+      return (
+        <Comment author={comment.author} key={comment.id}>
+          {comment.text}
+        </Comment>
+      );
+    });
+
     return (
       <div className="commentList">
-        Hello, {this.props.guest}! Comment List follows.
-        <Comment author="user one">This is the first comment.</Comment>
-        <Comment author="user two">This is the second comment.</Comment>
+        Comment List follows.
+        {commentNodes}
+      </div>
+    );
+  }
+});
+var CommentBox = React.createClass({
+  getInitialState: function() {
+    return {data: []};
+  },
+  componentDidMount: function() {
+    $.ajax({
+      url: this.props.url,
+      dataType: 'json',
+      cache: false,
+      success: function(data) {
+        this.setState({data: data});
+      }.bind(this),
+      error: function(xhr, status, err) {
+        console.error(this.props.url, status, err.toString());
+      }.bind(this)
+    });
+  },
+  render: function() {
+    return (
+      <div className="commentBox">
+        Hello, {this.props.guest}!
+        <CommentList data={this.state.data} />
       </div>
     );
   }
 });
 
 ReactDOM.render(
-  <CommentList guest="solo"/>,
+  <CommentBox guest="solo" url="/api/comments"/>,
   document.getElementById('content')
 );

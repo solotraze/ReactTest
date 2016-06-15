@@ -42,11 +42,17 @@ getRoutes['/'] = function(req, res) {
 /********************************/
 /* GET Services				*/
 /********************************/
-/*
-getRoutes['/api/readful'] = function(req, res) {
-  var url = req.query.targeturl;
+
+getRoutes['/api/comments'] = function(req, res) {
+  //var url = req.query.targeturl;
+  var commentsData = [
+    {id: 1, author: "Pete Hunt", text: "This is one comment"},
+    {id: 2, author: "Jordan Walke", text: "This is *another* comment"}
+  ];
+  res.setHeader('Content-Type', 'application/json');
+  res.send(commentsData);
 };
-*/
+
 
 
 /********************************/
