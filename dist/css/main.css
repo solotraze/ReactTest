@@ -1,0 +1,17 @@
+body {
+    font-family:'Segoe UI','Lucida Grande','Verdana','Arial';
+    font-size:0.8em;
+    color:#505050;
+}
+
+a {
+    color:#2090ff;
+    text-decoration:none;
+}
+
+
+#divFooter {
+    position: absolute;
+    bottom: 0px;
+    left: 0px;
+}
