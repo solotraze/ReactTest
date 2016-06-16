@@ -1,7 +1,7 @@
 {
-  "name": "readful",
-  "version": "1.0.0",
-  "description": "Article scrapper",
+  "name": "ReactTest",
+  "version": "0.1.0",
+  "description": "Test React in NodeJS",
   "main": "server.js",
   "scripts": {
     "test": "mocha"
