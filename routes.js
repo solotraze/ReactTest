@@ -43,14 +43,23 @@ getRoutes['/'] = function(req, res) {
 /* GET Services				*/
 /********************************/
 
+getRoutes['/api/users'] = function(req, res) {
+  //var url = req.query.targeturl;
+  var userFullName = 'solo tr';
+  var returnObj = { userFullName: userFullName };
+  res.setHeader('Content-Type', 'application/json');
+  res.send(returnObj);
+};
+
 getRoutes['/api/comments'] = function(req, res) {
   //var url = req.query.targeturl;
-  var commentsData = [
+  var commentsList = [
     {id: 1, author: "Pete Hunt", text: "This is one comment"},
     {id: 2, author: "Jordan Walke", text: "This is *another* comment"}
   ];
+  var returnObj = { commentsList: commentsList, lastUpdated: (new Date().toUTCString())};
   res.setHeader('Content-Type', 'application/json');
-  res.send(commentsData);
+  res.send(returnObj);
 };
 
 

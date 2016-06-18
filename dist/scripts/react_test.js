@@ -9,7 +9,7 @@ var Comment = React.createClass({
 });
 var CommentList = React.createClass({
   render: function() {
-    var commentNodes = this.props.data.map(function(comment) {
+    var commentNodes = this.props.commentsList.map(function(comment) {
       return (
         <Comment author={comment.author} key={comment.id}>
           {comment.text}
@@ -19,20 +19,33 @@ var CommentList = React.createClass({
 
     return (
       <div className="commentList">
-        Comment List follows.
+        Comment List follows (Last Updated: {this.props.lastUpdated})
         {commentNodes}
       </div>
     );
   }
 });
 var CommentBox = React.createClass({
-  loadCommentsFromServer: function() {
+  loadUserProfileFromServer: function() {
     $.ajax({
-      url: this.props.url,
+      url: this.props.uprofileUrl,
       dataType: 'json',
       cache: false,
-      success: function(data) {
-        this.setState({data: data});
+      success: function(returnObj) {
+        this.state.userFullName = returnObj.userFullName;
+      }.bind(this),
+      error: function(xhr, status, err) {
+        console.error(this.props.uprofileUrl, status, err.toString());
+      }.bind(this)
+    });
+  },
+  loadCommentsFromServer: function() {
+    $.ajax({
+      url: this.props.commentsUrl,
+      dataType: 'json',
+      cache: false,
+      success: function(returnObj) {
+        this.setState({commentsList: returnObj.commentsList, lastUpdated: returnObj.lastUpdated});
       }.bind(this),
       error: function(xhr, status, err) {
         console.error(this.props.url, status, err.toString());
@@ -40,22 +53,25 @@ var CommentBox = React.createClass({
     });
   },
   getInitialState: function() {
-    return {data: []};
+    return {commentsList: [], lastUpdated: ''};
   },
   componentDidMount: function() {
+    this.loadUserProfileFromServer();
     this.loadCommentsFromServer();
+    // Keep comments list refreshed
+    setInterval(this.loadCommentsFromServer, this.props.pollInterval);
   },
   render: function() {
     return (
       <div className="commentBox">
-        Hello, {this.props.guest}!
-        <CommentList data={this.state.data} />
+        Hello, {this.state.userFullName}!
+      <CommentList commentsList={this.state.commentsList} lastUpdated={this.state.lastUpdated} />
       </div>
     );
   }
 });
 
 ReactDOM.render(
-  <CommentBox guest="solo" url="/api/comments"/>,
+  <CommentBox uprofileUrl="/api/users" commentsUrl="/api/comments" pollInterval="3000" />,
   document.getElementById('content')
 );
