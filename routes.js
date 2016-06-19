@@ -54,8 +54,8 @@ getRoutes['/api/users'] = function(req, res) {
 getRoutes['/api/comments'] = function(req, res) {
   //var url = req.query.targeturl;
   var commentsList = [
-    {id: 1, author: "Pete Hunt", text: "This is one comment"},
-    {id: 2, author: "Jordan Walke", text: "This is *another* comment"}
+    {id: 1, authorName: "Pete Hunt", content: "This is one comment"},
+    {id: 2, authorName: "Jordan Walke", content: "This is *another* comment"}
   ];
   var returnObj = { commentsList: commentsList, lastUpdated: (new Date().toUTCString())};
   res.setHeader('Content-Type', 'application/json');
@@ -63,10 +63,23 @@ getRoutes['/api/comments'] = function(req, res) {
 };
 
 
-
 /********************************/
 /* POST Services				*/
 /********************************/
+
+/* Create a new comment */
+postRoutes['/api/comments'] = function(req, res) {
+  console.log('Request recieved for new comment.\n'
+              + req.body.authorName + ':\n'
+              + req.body.content + '\n');
+
+  // TODO: store in DB
+
+  // Return success
+  res.setHeader('Content-Type', 'application/json');
+  res.send({success:true});
+
+};
 
 
 /* Public properties */

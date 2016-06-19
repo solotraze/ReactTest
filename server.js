@@ -3,6 +3,7 @@
 var express = require('express');
 var fs      = require('fs');
 //var constants = require('./constants.js');
+var bodyParser = require('body-parser'); // To parse POST parameters
 var routes = require('./routes');
 
 /**
@@ -96,6 +97,10 @@ var webApp = function() {
      */
     self.initializeServer = function() {
       self.app = express();
+
+      self.app.use(bodyParser.json()); // request will need header "Content-Type: application/json"
+      self.app.use(bodyParser.urlencoded({ extended: true }));
+
       self.createRoutes();
     };
 
