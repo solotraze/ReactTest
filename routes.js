@@ -1,6 +1,8 @@
-var fs      = require('fs');
+var fs          = require('fs');
+var comments    = require('./repositories/comments');
 //var constants = require('./constants.js');
-var logger = require('./logger');
+//var logger = require('./logger');
+
 
 var zcache, cache_get;
 /* routing table entries */
@@ -52,14 +54,25 @@ getRoutes['/api/users'] = function(req, res) {
 };
 
 getRoutes['/api/comments'] = function(req, res) {
-  //var url = req.query.targeturl;
+  /*
   var commentsList = [
-    {id: 1, authorName: "Pete Hunt", content: "This is one comment"},
-    {id: 2, authorName: "Jordan Walke", content: "This is *another* comment"}
+    {authorName: "Pete Hunt", content: "This is one comment"},
+    {authorName: "Jordan Walke", content: "This is *another* comment"}
   ];
-  var returnObj = { commentsList: commentsList, lastUpdated: (new Date().toUTCString())};
-  res.setHeader('Content-Type', 'application/json');
-  res.send(returnObj);
+  */
+
+  comments.getAll(function(err, comments) {
+    if (!err) {
+      // Return list
+      var returnObj = { commentsList: comments, lastUpdated: (new Date().toUTCString())};
+      res.setHeader('Content-Type', 'application/json');
+      res.send(returnObj);
+    }
+    else {
+      // Return failure
+      res.sendStatus(500);
+    }
+  });
 };
 
 
@@ -69,16 +82,21 @@ getRoutes['/api/comments'] = function(req, res) {
 
 /* Create a new comment */
 postRoutes['/api/comments'] = function(req, res) {
-  console.log('Request recieved for new comment.\n'
-              + req.body.authorName + ':\n'
-              + req.body.content + '\n');
+  console.log('Request recieved for new comment.');
+  console.log(req.body.authorName + ':' + req.body.content);
 
-  // TODO: store in DB
-
-  // Return success
-  res.setHeader('Content-Type', 'application/json');
-  res.send({success:true});
-
+  var comment = { authorName: req.body.authorName, content: req.body.content };
+  // store in DB
+  comments.add(comment, function(err) {
+    if (!err) {
+      // Return success
+      res.sendStatus(200);
+    }
+    else {
+      // Return failure
+      res.sendStatus(500);
+    }
+  });
 };
 
 

@@ -11,7 +11,7 @@ var CommentList = React.createClass({
   render: function() {
     var commentNodes = this.props.commentsList.map(function(comment) {
       return (
-        <Comment author={comment.authorName} key={comment.id}>
+        <Comment author={comment.authorName} key={comment._id}>
           {comment.content}
         </Comment>
       );
@@ -43,7 +43,7 @@ var CommentForm = React.createClass({
       return;
     }
 
-    // TODO: post to server
+    // post to server
     this.props.onCommentSubmit({authorName: authorName, content: content });
 
     this.setState({authorName:'', content:'' });

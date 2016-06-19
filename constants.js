@@ -1,9 +1,9 @@
 /*** Constants ***/
 var constantsList = {
-	"dataPath": process.env.OPENSHIFT_DATA_DIR || './data/',
-	"failedUrlsLogFileName": "failedUrls.json",
-	"traceLogFileName": "trace.json",
-  "exceptionsLogFileName": "exceptions.json"
+  'CONNECTION_MONGODB':     'mongodb://localhost:27017/ReactTest',
+	'DATA_PATH':              process.env.OPENSHIFT_DATA_DIR || './data/',
+  'LOGFILE_TRACE':          'trace.json',
+  'LOGFILE_ERROR':          'exceptions.json'
 };
 
 function define(name, value) {
